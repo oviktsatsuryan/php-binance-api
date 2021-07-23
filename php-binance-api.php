@@ -861,11 +861,20 @@ class API
         if (is_null($asset) === false) {
             $params['coin'] = $asset;
         }
-        $return = $this->httpRequest("v1/capital/deposit/hisrec", "GET", $params, true);
+        $response = $this->httpRequest("v1/capital/deposit/hisrec", "GET", $params, true);
 
+        $return = [
+        	'success' => true,
+			'depositList' => []
+		];
+        
         // Adding for backwards compatibility with wapi
-        foreach ($return as $key=>$item) {
-            $return[$key]['asset'] = $item['coin'];
+		/*
+		 * where did "depositList" go?
+		 * */
+        foreach ($response as $key=>$item) {
+        	$item['asset'] = $item['coin'];
+            $return['depositList'][] = $item;
         }
         
         return $return;
